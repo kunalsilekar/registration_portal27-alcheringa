@@ -1,0 +1,155 @@
+.navbar-animation-wrapper {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.navbar-animation-wrapper .navbar {
+    position: relative;
+    top: 0;
+    left: auto;
+    transform: none;
+    margin: 0 auto;
+    pointer-events: auto;
+}
+
+.navbar {
+    width: calc(100% - 80px);
+    max-width: 1267px;
+    min-height: 65px;
+
+    margin: 0;
+    padding: 7px 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    background-color: #FCF8EB;
+    border-radius: 18px;
+    z-index: 100;
+}
+
+/* Logo */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.navbar-logo {
+    display: block;
+    width: 95px;
+    height: 2.2rem;
+    object-fit: contain;
+    object-position: left center;
+    flex-shrink: 0;
+}
+
+/* Navigation links */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 52px;
+}
+
+.navbar-links a {
+    font-family: 'Ellak', sans-serif;
+    color: #173D32;
+    text-decoration: none;
+    white-space: nowrap;
+
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 1.4;
+
+    transition: opacity 0.2s ease;
+}
+
+.navbar-links a:hover {
+    opacity: 0.65;
+}
+
+/* Login button */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.login-button {
+    height: 36px;
+    min-width: 80px;
+    padding: 0 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #0F3027;
+    color: #FFFFFF;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.login-button:hover {
+    opacity: 0.85;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .navbar {
+        width: calc(100% - 40px);
+        padding: 8px 20px;
+        gap: 16px;
+    }
+
+    .navbar-links {
+        gap: 24px;
+    }
+
+    .navbar-links a {
+        font-size: 13px;
+    }
+
+    .navbar-logo {
+        width: 85px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+    .navbar {
+        width: calc(100% - 24px);
+        padding: 10px 14px;
+        gap: 10px;
+        border-radius: 15px;
+    }
+
+    .navbar-logo {
+        width: 75px;
+    }
+
+    .navbar-links {
+        gap: 12px;
+    }
+
+    .navbar-links a {
+        font-size: 10px;
+    }
+
+    .login-button {
+        height: 25px;
+        padding: 0 12px;
+        font-size: 11px;
+    }
+}

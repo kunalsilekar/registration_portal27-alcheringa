@@ -1,38 +1,80 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: 'Ellak';
+  src: url('../public/assets/fonts/Ellak.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-.App-logo {
-  height: 40vmin;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.landing-page {
+  min-height: 100vh;
+  background: #F2EBE1;
+}
+
+.hero-scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #F2EBE1;
+}
+
+.landscape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 110vh;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  will-change: transform;
+}
+
+.foreground {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 150vh;
+
+  display: block;
+  z-index: 1;
+
+  will-change: transform;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Keep the navbar above the animated images */
+
+.navbar {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  margin: 0;
+  z-index: 100;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
