@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { animate } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,15 +7,58 @@ import '../App.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+function AnimatedStatNumber({ value, suffix = '', started }) {
+    const [display, setDisplay] = useState('0');
+    const frameRef = useRef(null);
+
+    useEffect(() => {
+        if (!started) return;
+
+        const startTime = performance.now();
+        const duration = 2000;
+
+        const tick = (now) => {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            const current = eased * value;
+
+            setDisplay(
+                current.toLocaleString('en-US', {
+                    maximumFractionDigits: 0,
+                })
+            );
+
+            if (progress < 1) {
+                frameRef.current = requestAnimationFrame(tick);
+            }
+        };
+
+        frameRef.current = requestAnimationFrame(tick);
+
+        return () => {
+            if (frameRef.current) cancelAnimationFrame(frameRef.current);
+        };
+    }, [started, value]);
+
+    return (
+        <span className="hero-stat-number">
+            {display}
+            {suffix}
+        </span>
+    );
+}
+
 function Hero() {
     const sectionRef = useRef(null);
     const landscapeRef = useRef(null);
     const foregroundRef = useRef(null);
     const navbarRef = useRef(null);
-    const titleRef = useRef(null);
     const letterRefs = useRef([]);
     const hoveredLetterRef = useRef(null);
     const titleText = 'ALCHERINGA';
+    const heroCopyRef = useRef(null);
+    const statsRef = useRef(null);
+    const [statsStarted, setStatsStarted] = useState(false);
 
     const spring = {
         type: 'spring',
@@ -125,9 +168,16 @@ function Hero() {
                     0
                 )
                 .to(
-                    titleRef.current,
+                    heroCopyRef.current,
                     {
-                        y: -200,
+                        y: -200, ease: 'none'
+                    },
+                    0
+                )
+                .to(
+                    statsRef.current,
+                    {
+                        y: -350,
                         ease: 'none',
                     },
                     0
@@ -135,6 +185,24 @@ function Hero() {
         }, sectionRef);
 
         return () => ctx.revert();
+    }, []);
+
+    useEffect(() => {
+        const stats = statsRef.current;
+        if (!stats) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setStatsStarted(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.2 }
+        );
+
+        observer.observe(stats);
+        return () => observer.disconnect();
     }, []);
 
     return (
@@ -153,26 +221,57 @@ function Hero() {
                 alt=""
             />
 
-            <h1
-                ref={titleRef}
-                className="hero-title"
-                aria-label={titleText}
-                onPointerLeave={handleTitlePointerLeave}
-            >
-                {[...titleText].map((letter, index) => (
-                    <span
-                        key={index}
-                        ref={(el) => {
-                            letterRefs.current[index] = el;
-                        }}
-                        className="hero-title-letter"
-                        onPointerEnter={() => handleLetterEnter(index)}
-                        aria-hidden="true"
-                    >
-                        {letter}
-                    </span>
-                ))}
-            </h1>
+            <div ref={heroCopyRef} className="hero-copy">
+                <h1
+                    className="hero-title"
+                    aria-label={titleText}
+                    onPointerLeave={handleTitlePointerLeave}
+                >
+                    {[...titleText].map((letter, index) => (
+                        <span
+                            key={index}
+                            ref={(el) => {
+                                letterRefs.current[index] = el;
+                            }}
+                            className="hero-title-letter"
+                            onPointerEnter={() => handleLetterEnter(index)}
+                            aria-hidden="true"
+                        >
+                            {letter}
+                        </span>
+                    ))}
+                </h1>
+
+                <div className="hero-intro">
+                    <p className="hero-tagline">
+                        Northeast India's biggest cultural fest is back. Bring your crew, bring your craft.
+                    </p>
+                    <button type="button" className="hero-register-button">
+                        <span className="hero-register-label">REGISTER</span>
+                    </button>
+                </div>
+            </div>
+
+            <div ref={statsRef} className="hero-stats">
+                <div className="hero-stat">
+                    <AnimatedStatNumber value={140} suffix="K" started={statsStarted} />
+                    <span className="hero-stat-label">FOOTFALL</span>
+                </div>
+                <div className="hero-stat">
+                    <AnimatedStatNumber value={100} suffix="+" started={statsStarted} />
+                    <span className="hero-stat-label">Events</span>
+                </div>
+                <div className="hero-stat">
+                    <AnimatedStatNumber value={500} suffix="+" started={statsStarted} />
+                    <span className="hero-stat-label">COLLEGE</span>
+                </div>
+                <div className="hero-stat">
+                    <AnimatedStatNumber value={45} suffix="+" started={statsStarted} />
+                    <span className="hero-stat-label">COMPETITIONS</span>
+                </div>
+            </div>
+
+
 
             <div ref={navbarRef} className="navbar-animation-wrapper">
                 <Navbar />
